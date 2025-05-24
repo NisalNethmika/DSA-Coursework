@@ -1,4 +1,9 @@
+// Name - D.N.N. De Zoysa
+// UOW ID - w2051810
+// IIT ID - 20231024
+
 import java.io.File;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -20,41 +25,34 @@ public class Main {
             Scanner fileScanner = new Scanner(new File(filePath));
             int vertices = fileScanner.nextInt();
             fileScanner.close();
-            
+
             // Read the graph with source 0 and sink as the last vertex
-            FlowNetwork network = GraphReader.readGraph(filePath, 0, vertices - 1);
-            
+            Graph network = GraphReader.readGraph(filePath, 0, vertices - 1);
+
             if (network != null) {
-                // Run Dinic's algorithm
-                DinicMaxFlow dinic = new DinicMaxFlow(network);
-                
+                // Run Edmonds-Karp algorithm
+                EdmondsKarpAlgorithm maxFlow = new EdmondsKarpAlgorithm(network);
+
                 long startTime = System.currentTimeMillis();
-                int maxFlow = dinic.findMaxFlow();
+                int maxFlowValue = maxFlow.findMaxFlow();
                 long endTime = System.currentTimeMillis();
-                
-                // Print results
-                System.out.println("Maximum flow: " + maxFlow);
+
+                // Print augmenting paths
+                System.out.println("Augmenting Paths:");
+                List<EdmondsKarpAlgorithm.AugmentingPath> paths = maxFlow.getAugmentingPaths();
+                for (int i = 0; i < paths.size(); i++) {
+                    EdmondsKarpAlgorithm.AugmentingPath path = paths.get(i);
+                    System.out.println("Path " + (i+1) + ": " + path);
+                    System.out.println("Flow: " + path.getFlow());
+                }
+
+                // Print total results
+                System.out.println("Maximum Flow: " + maxFlowValue);
                 System.out.println("Time taken: " + (endTime - startTime) + " ms");
-                
-                // Optionally print flows on each edge
-                printEdgeFlows(network, dinic);
             }
         } catch (Exception e) {
             System.err.println("Error processing file: " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-    
-    private static void printEdgeFlows(FlowNetwork network, DinicMaxFlow dinic) {
-        System.out.println("\nEdge flows (from -> to: flow/capacity):");
-        for (int i = 0; i < network.getVertices(); i++) {
-            for (int j : network.getNeighbors(i)) {
-                Edge edge = network.getEdge(i, j);
-                if (edge.getCapacity() > 0) {  // Only original edges, not residual
-                    System.out.println(i + " -> " + j + ": " + dinic.getFlow(i, j) + 
-                                     "/" + edge.getCapacity());
-                }
-            }
         }
     }
 }

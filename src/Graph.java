@@ -1,13 +1,17 @@
+// Name - D.N.N. De Zoysa
+// UOW ID - w2051810
+// IIT ID - 20231024
+
 import java.util.*;
 
-public class FlowNetwork {
+public class Graph {
     // Using HashMap<Integer, HashMap<Integer, Edge>> for adjacency list
     private final HashMap<Integer, HashMap<Integer, Edge>> graph;
     private final int source;
     private final int sink;
     private final int vertices;
     
-    public FlowNetwork(int vertices, int source, int sink) {
+    public Graph(int vertices, int source, int sink) {
         this.graph = new HashMap<>();
         this.source = source;
         this.sink = sink;
@@ -19,11 +23,9 @@ public class FlowNetwork {
         }
     }
     
-    // Add an edge with capacity
+    // Add an edge with capacity both ways
     public void addEdge(int from, int to, int capacity) {
-        // Forward edge
         Edge forward = new Edge(from, to, capacity);
-        // Backward edge (residual)
         Edge backward = new Edge(to, from, 0);
         
         // Set as residual edges of each other

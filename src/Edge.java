@@ -1,9 +1,13 @@
+// Name - D.N.N. De Zoysa
+// UOW ID - w2051810
+// IIT ID - 20231024
+
 public class Edge {
     private final int from;
     private final int to;
     private final int capacity;
     private int flow;
-    private Edge residual; // Reference to residual edge
+    private Edge residual;
     
     public Edge(int from, int to, int capacity) {
         this.from = from;
@@ -20,7 +24,7 @@ public class Edge {
     // Augment flow along this edge
     public void augment(int bottleneck) {
         flow += bottleneck;
-        residual.flow -= bottleneck; // Update residual edge's flow
+        residual.flow -= bottleneck;
     }
     
     public void setResidual(Edge residual) {
